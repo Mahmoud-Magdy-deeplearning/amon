@@ -1,0 +1,55 @@
+version: '3.7'
+
+services:
+  ### Services
+
+  service-main:
+    build:
+      context: ./
+    ports:
+      - ${SERVICE_API_PORT:-3000}:${SERVICE_API_PORT:-3000}
+    environment:
+      PORT: ${SERVICE_API_PORT:-3000}
+    depends_on:
+      - migrate
+      - db
+    env_file:
+      - ./docker.env
+    command: bash -c 'npm run wait:db & npm run wait:migrate & wait && npm run service:main'
+
+  service-api:
+    build:
+      context: ./
+    ports:
+      - ${SERVICE_API_PORT:-3000}:${SERVICE_API_PORT:-3000}
+    environment:
+      PORT: ${SERVICE_API_PORT:-3000}
+    depends_on:
+      - migrate
+      - db
+    env_file:
+      - ./docker.env
+    command: bash -c 'npm run wait:db & npm run wait:migrate & wait && npm run service:api'
+
+  ### Dependencies
+
+  db:
+    image: postgres:12.6-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pwdpostgre
+      POSTGRES_DB: amon-test
+      POSTGRES_HOST_AUTH_METHOD: password
+    ports:
+      - 5432:5432
+
+  ### Tools
+
+  migrate:
+    build:
+      context: ./
+    depends_on:
+      - db
+    env_file:
+      - ./docker.env
+    command: bash -c 'npm run wait:db && npm run db:migrate up'

@@ -1,0 +1,66 @@
+version: '3.7'
+
+services:
+  ### Services
+
+  service-api:
+    build:
+      context: ./
+    #    ports:
+    #      - ${SERVICE_API_PORT:-3000}:${SERVICE_API_PORT:-3000}
+    environment:
+      PORT: ${SERVICE_API_PORT:-3000}
+    depends_on:
+      - migrate
+      - db
+    env_file:
+      - ./docker.env
+      - ./test/test.env
+    command: bash -c 'npm run wait:db & npm run wait:migrate & wait && npm run service:api'
+
+  ### Dependencies
+
+  db:
+    image: postgres:12.6-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pwdpostgre
+      POSTGRES_DB: amon-test
+      POSTGRES_HOST_AUTH_METHOD: password
+    ports:
+      - 5432:5432
+
+  ### Tools
+
+  migrate:
+    build:
+      context: ./
+    depends_on:
+      - db
+    env_file:
+      - ./docker.env
+      - ./test/test.env
+    command: bash -c 'npm run wait:db && npm run db:migrate up'
+
+  ### Tests
+
+  unit:
+    build:
+      context: ./
+    command: bash -c 'npm run test:unit'
+
+  ### Missing only in test
+  dotonly:
+    build:
+      context: ./
+    command: ['npm run', 'test:dotonly']
+
+  linter:
+    build:
+      context: ./
+    command: ['npm run', 'lint']
+
+  formater:
+    build:
+      context: ./
+    command: ['npm run', 'format:check']

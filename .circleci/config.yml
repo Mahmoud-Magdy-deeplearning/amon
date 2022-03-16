@@ -1,0 +1,40 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12.18.2
+      - image: circleci/redis:4.0.9
+    steps:
+      - checkout
+      - run:
+          name: npm update
+          command: 'sudo npm install -g npm'
+      - run:
+          name: install dependencies
+          command: 'npm install'
+      - run:
+          name: dotonly
+          command: 'npm run test:dotonly'
+      - run:
+          name: lint
+          command: 'npm run lint'
+      - run:
+          name: format check
+          command: 'npm run format:check'
+      - run:
+          name: unit test
+          command: 'npm run test:coverage'
+      - run:
+          name: coverage check
+          command: 'npm run test:coverage:check'
+      - run:
+          name: send report
+          command: |
+            export CODECOV_TOKEN="e4efc334-9e28-4dcf-a9a2-d75c1556d4db"
+            bash <(curl -s https://codecov.io/bash)
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build

@@ -1,0 +1,23 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:node/recommended",
+    "plugin:promise/recommended",
+    "plugin:mocha/recommended"
+  ],
+  "globals": {
+    "expect": true,
+    "srcDir": true
+  },
+  "rules": {
+    "no-console": ["off"],
+    "require-atomic-updates": "off",
+    "mocha/no-mocha-arrows": "off",
+    "mocha/no-setup-in-describe": "off",
+    "mocha/no-hooks-for-single-case": "off",
+    "mocha/no-skipped-tests": "off"
+  }
+}
