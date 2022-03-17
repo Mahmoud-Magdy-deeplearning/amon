@@ -6,7 +6,8 @@ module.exports = {
         "createdAt" timestamp with time zone NOT NULL,
         "updatedAt" timestamp with time zone NOT NULL,
         "name" VARCHAR(255),
-        "code" VARCHAR(255)
+        "code" VARCHAR(255),
+        "price" FLOAT(53)
       );
     `;
     await transaction.sequelize.query(sql, { raw: true, transaction });

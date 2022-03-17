@@ -30,7 +30,6 @@ const CoinRouter = {
       coinCode: ctx.request.body.coinCode,
       name: ctx.request.body.name
     };
-    console.log('name: '+ params.name + '\n code: ' + params.coinCode +'\n')
     
     const formattedParams = await validateParams(CoinRouter.schemaCreateCoin, params);
 
@@ -49,6 +48,7 @@ const CoinRouter = {
      * @apiSampleRequest /
      *
      */
+
     router.get('/:coinCode', CoinRouter.getCoinByCode);
 
     /**

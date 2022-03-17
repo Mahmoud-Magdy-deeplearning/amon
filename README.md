@@ -5,22 +5,22 @@ This is the architecture of AMON NodeJS Test.
 ## Prerequisites
 
 - Docker ([https://docs.docker.com/install](https://docs.docker.com/install))
-- NodeJS >`16.x.x` (prefer install with [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm))
+- NodeJS =`12.0.0` (prefer install with [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm))
 - Postgres client (Osx: `brew install postgres`)
-- IDE (prefer [https://www.jetbrains.com/webstorm/download](https://www.jetbrains.com/webstorm/download))
 
 ## Setup for development:
 
 - Clone repository
 
 ```sh
-git clone https://github.com/amontech/amon-nodejs-test.git
+git clone https://github.com/Mahmoud-Magdy-deeplearning/amon.git
 ```
 
 - Use nvm to install node
 
 ```sh
-nvm i
+nvm i 12.0.0
+nvm use 12.0.0
 ```
 
 - Install node dependencies
@@ -34,7 +34,7 @@ npm i
 - Unit tests
 
 ```sh
-npm run test:unit
+npm run test
 ```
 
 - Start/stop - restart dependencies

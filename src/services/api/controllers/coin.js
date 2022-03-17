@@ -1,24 +1,27 @@
 const errors = require('../../../helpers/errors');
-const requester = require('../../../helpers/requester');
+const priceRequester = require('../../../helpers/priceRequester');
 const Models = require('../../../models/pg');
+const lastTimeUpdated = require('../../../helpers/lastTimeUpdated')
 
 const CoinController = {
   async getCoinByCode(coinCode) {
     const coin = await Models.Coin.findByCoinCode(coinCode);
-    console.log('\n coin is: '+ coin.name + '\n')
     errors.assertExposable(coin, 'unknown_coin_code');
-    const price = await requester.fetchPrice(coin.coinCode)
+    
+    // Fetching current price from API if lastt update > 1 Hour 
+    const diff = lastTimeUpdated(coin.updatedAt)
+    if( diff >= 3600 || coin.price == null){
+      const price = await priceRequester.fetchPrice(coinCode.toLowerCase())
+      await Models.Coin.updatePrice(coinCode, price);
+    }
+
     return coin.filterKeys(true);
   },
   async createCoin(name, coinCode) {
     const coin = await Models.Coin.createCoin(coinCode, name);
-
     errors.assertExposable(coin, 'coinCode_is_exist');
 
     return coin.filterKeys();
-  },
-  async updatePrice(coinCode,price) {
-    const coin = await Models.Coin.updatePrice(coinCode, price);
   },
 };
 

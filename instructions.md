@@ -34,7 +34,7 @@ The **GET** endpoint should also return the current price of the coin which need
 - To avoid get rate limited from CoinGecko store the price and the last updated time and only fetch the price again
   if the last updated time is older than 1hour
 
-- Write the migration file
+-  
 
 - Test your code
 

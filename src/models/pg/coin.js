@@ -29,20 +29,25 @@ module.exports = function (sequelize, DataTypes) {
     }
   );
 
+
   Coin.prototype.filterKeys = function (price=false) {
+
     const obj = this.toObject();
-    const filtered = {}
     if(price){
-    filtered = pick(obj, 'id', 'name', 'code', 'price');
+    return pick(obj, 'id', 'name', 'code', 'price');
     }
     else {
-    filtered = pick(obj, 'id', 'name', 'code');
+    return pick(obj, 'id', 'name', 'code');
     }
-    return filtered;
   };
 
   Coin.findByCoinCode = function (code, tOpts = {}) {
+    
     return Coin.findOne(Object.assign({ where: { code } }, tOpts));
+  };
+  
+  Coin.updatePrice = async function (code, price) {
+      return Coin.update({price}, { where: { code } });
   };
 
   Coin.createCoin = async function (code, name) {
@@ -55,7 +60,6 @@ module.exports = function (sequelize, DataTypes) {
   else 
       return null
     };
-  Coin.updatePrice = async function (code, price) {
-      return Coin.update({price}, { where: { code } });
+
+  return Coin;
 };
-}
